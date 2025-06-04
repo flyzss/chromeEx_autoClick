@@ -1,0 +1,161 @@
+body {
+  font-family: sans-serif;
+  width: 350px;
+  padding: 10px;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  text-align: center;
+  color: #007bff;
+  margin-top: 0;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+  width: calc(100% - 12px); /* Account for padding */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 0.9em;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 15px;
+}
+
+.controls button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+#startButton {
+  background-color: #28a745;
+  color: white;
+}
+
+#startButton:hover {
+  background-color: #218838;
+}
+
+#stopButton {
+  background-color: #dc3545;
+  color: white;
+}
+
+#stopButton:hover {
+  background-color: #c82333;
+}
+
+#stopButton:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.status {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.status p {
+  margin: 5px 0;
+}
+
+.status span {
+  font-weight: bold;
+}
+
+.logs {
+  margin-top: 10px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+}
+
+.logs h3 {
+  margin-top: 0;
+  font-size: 1em;
+  color: #007bff;
+}
+
+#logDisplay {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 4px;
+  max-height: 100px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 0.8em;
+  color: #555;
+}
+
+/* Consent Area Styles */
+#consentArea h2 {
+  margin-bottom: 10px;
+}
+
+#consentArea p {
+  margin-bottom: 10px;
+}
+
+#consentArea label {
+  vertical-align: middle;
+}
+
+#consentArea input[type="checkbox"] {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+#confirmConsentButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+#readDisclaimerLink {
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#readDisclaimerLink:hover {
+  color: #0056b3;
+}

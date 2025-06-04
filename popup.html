@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>定时点击与数据助手</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="consentArea" class="container" style="padding-bottom: 15px;">
+    <h2>使用前确认</h2>
+    <p style="font-size: 0.9em;">请仔细阅读并同意以下 <a href="#disclaimerTitle" id="readDisclaimerLink">免责声明</a> 的全部条款后方可使用本扩展。</p>
+    <div>
+      <input type="checkbox" id="consentCheckbox" style="margin-right: 5px;">
+      <label for="consentCheckbox" style="font-size: 0.9em;">我已阅读、理解并完全同意免责声明的全部内容。</label>
+    </div>
+    <button id="confirmConsentButton" disabled style="margin-top: 10px; padding: 8px 15px;">确认同意并开始使用</button>
+    <p id="consentError" style="color: red; font-size: 0.8em; margin-top: 5px; display: none;">请先勾选同意框。</p>
+  </div>
+
+  <hr style="margin-top: 20px; margin-bottom: 10px;">
+  <div class="disclaimer" style="font-size: 0.8em; color: #555; text-align: justify;">
+    <p><strong id="disclaimerTitle">免责声明</strong></p>
+
+    <p style="margin-top: 8px;">本扩展程序是一款为用户提供自定义网页自动化操作的专业工具。其核心设计目的是帮助用户在个人授权、完全符合所有适用法律法规及相关网站服务条款的前提下，根据个性化需求配置并执行高效的网页自动化流程。</p>
+
+    <p style="margin-top: 8px;">如同任何工具（例如厨房中的刀具），本扩展程序的最终用途完全取决于使用者。用户对如何配置本扩展程序以及通过它执行的所有操作（包括但不限于指定目标网站、定义操作规则、数据获取与处理、以及后续的数据使用和提交行为）承担全部且不可推卸的责任。</p>
+
+    <p style="margin-top: 8px;">使用本扩展程序时，用户必须确保所有行为严格遵守当地及国际间的各项法律法规，包括但不限于《中华人民共和国网络安全法》、《中华人民共和国个人信息保护法》、《通用数据保护条例》(GDPR)、《加州消费者隐私法》(CCPA)等适用的数据保护和隐私规定，并充分尊重及遵守目标网站的服务条款、隐私政策以及相关的版权和数据保护规定。</p>
+
+    <p style="margin-top: 8px;">将本扩展程序用于任何非法目的（侵犯他人隐私、恶意攻击、违反网站使用协议等）、或任何可能侵犯第三方合法权益、或违背社会公德的行为，均非本扩展程序的设计初衷，也非开发者所支持或认可。对于用户任何形式的非法使用、不当使用或滥用本扩展程序导致的一切法律纠纷、经济损失或其他不良后果，开发者不承担任何形式的责任。</p>
+
+    <p style="margin-top: 8px;">通过勾选上方同意框并点击"确认同意并开始使用"按钮，即表示您已仔细阅读、充分理解并完全接受本免责声明的全部条款。您承诺将以合法、合规、道德且负责任的方式使用本工具，并自行承担因使用本工具可能涉及的包括但不限于GDPR、CCPA在内的所有相关法律法规的合规责任。您的同意状态及时间将被系统记录。</p>
+    </div>
+
+  <div id="mainApp" style="display: none;">
+    <div class="container">
+    <h2>配置</h2>
+
+    <div class="form-group">
+      <label for="targetUrl">目标网页URL (可选):</label>
+      <input type="url" id="targetUrl" placeholder="例如: https://example.com">
+    </div>
+
+    <div class="form-group">
+      <label for="buttonSelector">按钮选择器 (CSS 或 XPath):</label>
+      <input type="text" id="buttonSelector" placeholder="例如: #submitButton 或 //button[@id='submit']">
+    </div>
+
+    <div class="form-group">
+      <label for="listenUrl">监听的服务器URL/模式:</label>
+      <input type="text" id="listenUrl" placeholder="例如: *://api.example.com/data*">
+    </div>
+
+    <div class="form-group">
+      <label for="submitUrl">数据提交URL:</label>
+      <input type="url" id="submitUrl" placeholder="例如: https://your-server.com/api/submit">
+    </div>
+
+    <div class="form-group">
+      <label for="timerInterval">定时周期 (秒):</label>
+      <input type="number" id="timerInterval" min="1" value="60">
+    </div>
+
+    <div class="form-group">
+      <label for="dataProcessingMethod">数据整理方法:</label>
+      <select id="dataProcessingMethod">
+        <option value="none">不整理</option>
+        <option value="extractJsonField">提取特定JSON字段</option>
+        <!-- 更多预设方法可以在这里添加 -->
+        <option value="customScript">自定义脚本</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="customScriptContainer" style="display: none;">
+      <label for="customScript">自定义整理脚本 (JavaScript):</label>
+      <textarea id="customScript" rows="5" placeholder="// responseData 是捕获到的响应体
+// return processedData;"></textarea>
+    </div>
+
+    <h2>控制</h2>
+    <div class="controls">
+      <button id="startButton">启动</button>
+      <button id="stopButton" disabled>停止</button>
+    </div>
+
+    <div class="status">
+      <p>状态: <span id="statusDisplay">未运行</span></p>
+      <p>下次执行: <span id="nextRunDisplay">N/A</span></p>
+    </div>
+
+    <div class="logs" style="display: none;">
+      <h3>日志:</h3>
+      <pre id="logDisplay"></pre>
+    </div>
+
+  </div>
+  <script src="popup.js"></script>
+
+
+</body>
+</html>

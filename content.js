@@ -3,6 +3,13 @@
 
 // console.log('内容脚本已加载。'); // 用于调试，确认脚本注入
 
+/**
+ * @description 监听来自background.js的消息，主要处理点击页面元素的指令
+ * @param {Object} message - 消息对象，包含command和selector等信息
+ * @param {Object} sender - 消息发送方信息
+ * @param {Function} sendResponse - 回调函数，用于向发送方发送响应
+ * @returns {boolean} 如果是异步处理则返回true，否则返回false
+ */
 // 监听来自 background.js 的消息
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // 检查消息命令是否为 'clickButton'

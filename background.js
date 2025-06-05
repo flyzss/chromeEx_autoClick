@@ -54,7 +54,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   return false; // 默认同步处理
 });
 
-// 创建定时器函数
+/**
+ * @description 创建定时器函数
+ * @param {number} intervalInSeconds - 定时器间隔时间（秒）
+ * @returns {void} 无返回值
+ */
 function createAlarm(intervalInSeconds) {
   // 清除可能已存在的同名定时器，以防重复创建
   chrome.alarms.clear(ALARM_NAME, (wasCleared) => {
@@ -87,7 +91,10 @@ function createAlarm(intervalInSeconds) {
   });
 }
 
-// 停止定时器函数
+/**
+ * @description 停止定时器函数
+ * @returns {void} 无返回值
+ */
 function stopAlarm() {
   // 使用 chrome.alarms.clear 清除定时器
   chrome.alarms.clear(ALARM_NAME, (wasCleared) => {
@@ -118,7 +125,10 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 
-// 执行预定任务的函数
+/**
+ * @description 执行预定任务的函数，主要负责点击按钮和处理网络请求
+ * @returns {Promise<void>} Promise对象
+ */
 async function performScheduledTask() {
   // 检查任务是否仍在运行且配置有效
   if (!isRunning || !currentConfig || !currentConfig.buttonSelector) {
@@ -189,7 +199,11 @@ if (chrome.webRequest.onCompleted.hasListener(networkRequestListener)) {
   chrome.webRequest.onCompleted.removeListener(networkRequestListener);
 }
 
-// 定义网络请求监听函数
+/**
+ * @description 网络请求监听函数，用于监听匹配的URL请求
+ * @param {Object} details - 请求详情对象
+ * @returns {void} 无返回值
+ */
 function networkRequestListener(details) {
   // 检查任务是否正在运行以及是否有监听URL的配置
   if (!isRunning || !currentConfig.listenUrl || !currentConfig.submitUrl) {
@@ -231,7 +245,11 @@ chrome.webRequest.onCompleted.addListener(
   { urls: ['<all_urls>'] } // 监听所有URL，然后在回调中根据用户配置过滤
 );
 
-// 数据整理引擎函数
+/**
+ * @description 数据整理引擎函数，根据配置的处理方法对数据进行整理
+ * @param {Object} data - 原始数据
+ * @returns {Promise<Object>} 处理后的数据
+ */
 async function processData(data) {
   logToPopup('开始整理数据...');
   // 检查是否有整理方法配置
@@ -293,7 +311,11 @@ async function processData(data) {
   return data;
 }
 
-// 数据提交模块函数
+/**
+ * @description 数据提交模块函数，将处理后的数据提交到指定URL
+ * @param {Object} dataToSubmit - 要提交的数据
+ * @returns {Promise<void>} Promise对象
+ */
 async function submitData(dataToSubmit) {
   // 检查是否有提交URL的配置
   if (!currentConfig.submitUrl) {
@@ -323,7 +345,11 @@ async function submitData(dataToSubmit) {
   }
 }
 
-// 更新 Popup 显示的状态信息
+/**
+ * @description 更新 Popup 显示的状态信息
+ * @param {Function} [callback] - 可选的回调函数
+ * @returns {void} 无返回值
+ */
 function updatePopupStatus(callback) {
   // 构造状态信息对象
   const statusInfo = {
@@ -343,7 +369,11 @@ function updatePopupStatus(callback) {
   }
 }
 
-//向Popup发送日志消息
+/**
+ * @description 向Popup发送日志消息
+ * @param {string} messageContent - 日志消息内容
+ * @returns {void} 无返回值
+ */
 function logToPopup(messageContent) {
   // 构造日志消息对象
   const logMessage = {

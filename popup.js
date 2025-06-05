@@ -17,7 +17,11 @@ document.addEventListener('DOMContentLoaded', function () {
         customScriptInput, startButton, stopButton, statusDisplay,
         nextRunDisplay, logDisplay, logsContainer;
 
-    function initializeMainAppDOMElements() {
+    /**
+ * @description 初始化主应用程序的DOM元素
+ * @returns {void} 无返回值
+ */
+function initializeMainAppDOMElements() {
         targetUrlInput = document.getElementById('targetUrl');
         buttonSelectorInput = document.getElementById('buttonSelector');
         listenUrlInput = document.getElementById('listenUrl');
@@ -34,14 +38,22 @@ document.addEventListener('DOMContentLoaded', function () {
         logsContainer = document.querySelector('#mainApp .logs'); // More specific selector
     }
 
-    function showMainApp() {
+    /**
+ * @description 显示主应用程序界面，隐藏同意区域
+ * @returns {void} 无返回值
+ */
+function showMainApp() {
         if (consentArea) consentArea.style.display = 'none';
         if (mainApp) mainApp.style.display = 'block';
         initializeMainAppDOMElements();
         initializeAppLogic();
     }
 
-    function showConsentArea() {
+    /**
+ * @description 显示同意区域，隐藏主应用程序
+ * @returns {void} 无返回值
+ */
+function showConsentArea() {
         if (consentArea) consentArea.style.display = 'block';
         if (mainApp) mainApp.style.display = 'none';
     }
@@ -97,7 +109,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Main application logic (to be initialized after consent)
-    function initializeAppLogic() {
+    /**
+ * @description 初始化应用程序逻辑，包括事件监听器和配置加载
+ * @returns {void} 无返回值
+ */
+function initializeAppLogic() {
         if (!targetUrlInput) { // Guard against uninitialized DOM
             console.error("Main app DOM elements not found. Cannot initialize app logic.");
             return;
@@ -153,7 +169,11 @@ document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('unload', saveConfig); // Save config when popup closes
     }
 
-    function loadConfig() {
+    /**
+ * @description 从Chrome存储中加载配置到表单
+ * @returns {void} 无返回值
+ */
+function loadConfig() {
         if (!targetUrlInput) return; // Ensure DOM is ready
 
         chrome.storage.local.get([
@@ -184,7 +204,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function saveConfig() {
+    /**
+ * @description 将当前表单配置保存到Chrome存储
+ * @returns {Object|null} 成功时返回当前配置对象，DOM元素未准备好时返回null
+ */
+function saveConfig() {
         if (!targetUrlInput) { // Ensure DOM is ready before trying to save
             // console.warn("Attempted to save config before main app DOM was ready.");
             return null;
@@ -206,7 +230,12 @@ document.addEventListener('DOMContentLoaded', function () {
         return config;
     }
 
-    function updateUiForRunningState(running) {
+    /**
+ * @description 更新UI以反映任务的运行状态
+ * @param {boolean} running - 任务是否正在运行
+ * @returns {void} 无返回值
+ */
+function updateUiForRunningState(running) {
         if (!startButton || !stopButton || !statusDisplay || !nextRunDisplay) return; // Ensure DOM is ready
 
         startButton.disabled = running;
@@ -223,7 +252,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function updateLog(logMessage) {
+    /**
+ * @description 更新日志显示
+ * @param {string} logMessage - 要显示的日志消息
+ * @returns {void} 无返回值
+ */
+function updateLog(logMessage) {
         if (!logDisplay || !logsContainer) return; // Ensure DOM is ready
 
         const timestamp = new Date().toLocaleTimeString();
@@ -233,7 +267,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Listener for messages from background.js (status updates, logs)
+    /**
+     * @description 监听来自background.js的消息
+     * @param {Object} message - 消息对象
+     * @param {Object} sender - 发送方信息
+     * @param {Function} sendResponse - 回调函数
+     */
     chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         if (message.command === 'updateStatus') {
             if (statusDisplay && nextRunDisplay && typeof updateUiForRunningState === 'function') {
